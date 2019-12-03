@@ -26,8 +26,16 @@ public class ArticleViewModel extends AndroidViewModel {
         return localArticles;
     }
 
+    public List<Article> getOnlineArticles(){
+        return repository.getOnlineArticles();
+    }
+
     public List<Article> getById(int...ids){
         return repository.getArticlesByIds(ids);
+    }
+
+    public boolean checkConnection(){
+        return repository.isNetworkConnected();
     }
 
 }

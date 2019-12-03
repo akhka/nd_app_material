@@ -47,8 +47,7 @@ public class ArticleRepository {
 
     // get online data *****************************************************************************
     public List<Article> getOnlineArticles() {
-
-
+        new OnlineArticlesTask().execute();
         return onlineArticles;
     }
 

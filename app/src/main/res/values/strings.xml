@@ -11,4 +11,6 @@
     <string name="up">Up</string>
     <string name="book_image">book_image</string>
     <string name="book_image_display">Display Book\'s cover</string>
+
+    <string name="TRANSATION_NAME">imageTransation</string>
 </resources>
