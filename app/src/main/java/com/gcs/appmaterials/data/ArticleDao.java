@@ -9,6 +9,7 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import com.gcs.appmaterials.model.Article;
+import com.gcs.appmaterials.model.IntentMemory;
 
 import java.util.List;
 

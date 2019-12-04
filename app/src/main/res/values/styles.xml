@@ -1,6 +1,8 @@
 <resources>
 
     <style name="Theme.Bacon" parent="@style/Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowContentTransitions">true</item>
+
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="android:textColorPrimary">@color/primary_text</item>
@@ -10,6 +12,11 @@
         <item name="android:colorForeground">@color/light_color</item>
 
         <item name="android:actionBarSize">@dimen/toolbarSize</item>
+
+        <!-- specify enter and exit transitions -->
+        <item name="android:windowEnterTransition">@transition/detail_transition_enter</item>
+        <item name="android:windowExitTransition">@transition/detail_transition_exit</item>
+
     </style>
 
 

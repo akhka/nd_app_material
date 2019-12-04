@@ -7,12 +7,15 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.app.Activity;
 import android.os.Bundle;
+import android.transition.Fade;
 import android.widget.Toast;
 
 import com.gcs.appmaterials.R;
 import com.gcs.appmaterials.databinding.ActivityArticleListBinding;
 import com.gcs.appmaterials.model.Article;
+import com.gcs.appmaterials.ui.adapters.ArticleAdapterNoBind;
 import com.gcs.appmaterials.ui.adapters.ArticleRecycleAdapter;
 import com.gcs.appmaterials.viewmodel.ArticleViewModel;
 
@@ -23,17 +26,23 @@ public class ArticleListActivity extends AppCompatActivity {
 
     private ActivityArticleListBinding binding;
     private ArticleViewModel viewModel;
-    private ArticleRecycleAdapter adapter;
+    private ArticleAdapterNoBind adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_article_list);
 
+        Fade fade = new Fade();
+        fade.excludeTarget(android.R.id.statusBarBackground, true);
+        fade.excludeTarget(android.R.id.navigationBarBackground, true);
+        getWindow().setEnterTransition(fade);
+        getWindow().setExitTransition(fade);
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_article_list);
         binding.homeArticleRv.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         binding.homeArticleRv.setHasFixedSize(true);
-        adapter = new ArticleRecycleAdapter(this);
+        adapter = new ArticleAdapterNoBind(this);
         binding.homeArticleRv.setAdapter(adapter);
         binding.homeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -53,6 +62,8 @@ public class ArticleListActivity extends AppCompatActivity {
 
         getList();
     }
+
+
 
     public void setRecyclerViewAdapter(List<Article> articles){
         adapter.setList(articles);
