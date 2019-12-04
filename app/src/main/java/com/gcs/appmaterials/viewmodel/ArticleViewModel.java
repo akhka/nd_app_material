@@ -34,6 +34,10 @@ public class ArticleViewModel extends AndroidViewModel {
         return repository.getArticlesByIds(ids);
     }
 
+    public void checkOnlineList(){
+        repository.checkOnlineList();
+    }
+
     public boolean checkConnection(){
         return repository.isNetworkConnected();
     }

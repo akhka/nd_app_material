@@ -5,8 +5,10 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.gcs.appmaterials.R;
 import com.gcs.appmaterials.databinding.ActivityArticleListBinding;
@@ -30,38 +32,39 @@ public class ArticleListActivity extends AppCompatActivity {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_article_list);
         binding.homeArticleRv.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-        //binding.homeArticleRv.setHasFixedSize(true);
+        binding.homeArticleRv.setHasFixedSize(true);
+        adapter = new ArticleRecycleAdapter(this);
+        binding.homeArticleRv.setAdapter(adapter);
+        binding.homeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getList();
+                binding.homeRefresh.setRefreshing(false);
+            }
+        });
 
         viewModel = ViewModelProviders.of(this).get(ArticleViewModel.class);
+        viewModel.getLocalArticles().observe(this, new Observer<List<Article>>() {
+            @Override
+            public void onChanged(List<Article> articles) {
+                setRecyclerViewAdapter(articles);
+            }
+        });
 
-        if (viewModel.checkConnection()){
-            List<Article> onlineList = new ArrayList<>();
-            onlineList = viewModel.getOnlineArticles();
-            if (onlineList.isEmpty()){
-                viewModel.getLocalArticles().observe(this, new Observer<List<Article>>() {
-                    @Override
-                    public void onChanged(List<Article> articles) {
-                        setRecyclerViewAdapter(articles);
-                    }
-                });
-            }
-            else {
-                setRecyclerViewAdapter(onlineList);
-            }
-        }
-        else {
-            viewModel.getLocalArticles().observe(this, new Observer<List<Article>>() {
-                @Override
-                public void onChanged(List<Article> articles) {
-                    setRecyclerViewAdapter(articles);
-                }
-            });
-        }
+        getList();
     }
 
     public void setRecyclerViewAdapter(List<Article> articles){
-        adapter = new ArticleRecycleAdapter(ArticleListActivity.this, articles);
-        binding.homeArticleRv.setAdapter(adapter);
+        adapter.setList(articles);
         adapter.notifyDataSetChanged();
+    }
+
+    public void getList(){
+        if (viewModel.checkConnection()){
+            viewModel.checkOnlineList();
+        }
+        else {
+            Toast.makeText(this, "No Internet Connection!", Toast.LENGTH_SHORT).show();
+        }
     }
 }

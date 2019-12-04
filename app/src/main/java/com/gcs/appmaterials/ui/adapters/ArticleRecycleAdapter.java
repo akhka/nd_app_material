@@ -27,9 +27,8 @@ public class ArticleRecycleAdapter extends RecyclerView.Adapter<ArticleRecycleAd
     private List<Article> articles = new ArrayList<>();
     private Handlers handler;
 
-    public ArticleRecycleAdapter(Context context, List<Article> articles){
+    public ArticleRecycleAdapter(Context context){
         this.context = context;
-        this.articles = articles;
     }
 
     @NonNull
@@ -83,5 +82,9 @@ public class ArticleRecycleAdapter extends RecyclerView.Adapter<ArticleRecycleAd
             super(itemView.getRoot());
             binding = itemView;
         }
+    }
+
+    public void setList(List<Article> articles){
+        this.articles = articles;
     }
 }

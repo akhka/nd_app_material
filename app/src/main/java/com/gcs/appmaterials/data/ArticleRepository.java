@@ -60,7 +60,7 @@ public class ArticleRepository {
         }
     }
 
-    private void checkOnlineList() {
+    public void checkOnlineList() {
         apiService = RetrofitInstance.getApiService();
         Call<List<Article>> call = apiService.getArticles();
         call.enqueue(new Callback<List<Article>>() {
@@ -70,7 +70,8 @@ public class ArticleRepository {
                     return;
                 onlineArticles = response.body();
                 if (!onlineArticles.isEmpty()) {
-                    deleteAllArticles();
+                    Article[] arrayArticles = new Article[onlineArticles.size()];
+                    updateAllArticles(onlineArticles.toArray(arrayArticles));
                     Article[] articles = new Article[onlineArticles.size()];
                     insertArticles(onlineArticles.toArray(articles));
                 }
@@ -153,6 +154,18 @@ public class ArticleRepository {
         }.execute();
     }
     // =============================================================================================
+
+    // update all articles
+    private void updateAllArticles(final Article...articles){
+        new AsyncTask(){
+
+            @Override
+            protected Object doInBackground(Object[] objects) {
+                dao.update(articles);
+                return null;
+            }
+        }.execute();
+    }
 
     // check connection to internet ****************************************************************
     public boolean isNetworkConnected() {
