@@ -49,6 +49,10 @@ public class ArticleDetailActivity extends AppCompatActivity {
             List<Article> articles = viewModel.getById(id);
             article = articles.get(0);
             binding.setArticle(article);
+
+            Handlers handler = new Handlers(this, article);
+            binding.setHandler(handler);
+
             if (article.getPhoto() != null){
                 try{
                     bitmap = new AsyncTask<Void, Void, Bitmap>() {
@@ -69,10 +73,10 @@ public class ArticleDetailActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-
-            Handlers handler = new Handlers(this, article);
-            binding.setHandler(handler);
         }
+
+        Handlers handler = new Handlers(this, article);
+        binding.setHandler(handler);
 
     }
 }

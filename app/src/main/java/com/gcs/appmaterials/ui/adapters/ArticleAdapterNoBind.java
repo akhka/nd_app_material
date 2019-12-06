@@ -31,6 +31,15 @@ public class ArticleAdapterNoBind extends RecyclerView.Adapter<ArticleAdapterNoB
 
     private Context context;
     private List<Article> articles = new ArrayList<>();
+    OnItemClickListener listener;
+
+    public interface OnItemClickListener{
+        void onItemClick(int position);
+    }
+
+    public void setOItemClickListener(OnItemClickListener listener){
+        this.listener = listener;
+    }
 
     public ArticleAdapterNoBind(Context context){
         this.context = context;
@@ -41,27 +50,15 @@ public class ArticleAdapterNoBind extends RecyclerView.Adapter<ArticleAdapterNoB
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.list_item_article, parent, false);
         final ViewHolder vh = new ViewHolder(view);
-        view.setOnClickListener(new View.OnClickListener() {
+        /*view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                ActivityOptionsCompat options = ActivityOptionsCompat.
-                        makeSceneTransitionAnimation((Activity) context,
-                                vh.thumb,
-                                Constants.TRANSATION_NAME);
-
-                SharedPreferences preferences = ((Activity) context).getPreferences(Context.MODE_PRIVATE);
-                SharedPreferences.Editor prefEditor = preferences.edit();
-                Gson gson = new Gson();
-                String json = gson.toJson(options);
-                prefEditor.putString("options", json);
-                prefEditor.commit();
-
                 Intent intent = new Intent(context, ArticleDetailActivity.class);
-                intent.putExtra("id", articles.get(vh.getAdapterPosition()).getId());
+                int id = articles.get(vh.getAdapterPosition()).getId();
+                intent.putExtra("id", id);
                 context.startActivity(intent);
             }
-        });
+        });*/
 
         return vh;
     }
@@ -111,6 +108,18 @@ public class ArticleAdapterNoBind extends RecyclerView.Adapter<ArticleAdapterNoB
             thumb = itemView.findViewById(R.id.item_thumbnail);
             title = itemView.findViewById(R.id.item_title);
             author = itemView.findViewById(R.id.item_author);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null){
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION){
+                            listener.onItemClick(position);
+                        }
+                    }
+                }
+            });
         }
     }
 

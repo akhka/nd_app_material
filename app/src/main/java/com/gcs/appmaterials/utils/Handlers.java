@@ -57,9 +57,15 @@ public class Handlers {
 
 
     public void onClickShare(View view){
-        context.startActivity(Intent.createChooser(ShareCompat.IntentBuilder.from((Activity) context)
-                .setType("text/plain")
-                .setText(article.getTitle() + "/n" + article.getAuthor() + "/n" + article.getBody())
-                .getIntent(), "Share"));
+        new Runnable() {
+            @Override
+            public void run() {
+                Intent shareIntent = new Intent();
+                shareIntent.setAction(Intent.ACTION_SEND);
+                shareIntent.putExtra("Text", article.getTitle() + "\n" + article.getAuthor());
+                context.startActivity(Intent.createChooser(shareIntent,"Share to..."));
+            }
+        }.run();
+
     }
 }
